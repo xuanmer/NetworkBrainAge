@@ -1,6 +1,7 @@
 import os.path
 import random
-from qsiprep.niworkflows.interfaces.registration import RobustMNINormalizationRPT
+# from qsiprep.niworkflows.interfaces.registration import RobustMNINormalizationRPT
+from qsiprep.interfaces.niworkflows import RobustMNINormalizationRPT
 from pkg_resources import resource_filename as pkgr
 from nipype.pipeline import engine as pe
 from qsiprep.interfaces.bids import ReconDerivativesDataSink
