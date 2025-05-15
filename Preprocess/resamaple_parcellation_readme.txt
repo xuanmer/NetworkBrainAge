@@ -1,7 +1,7 @@
 docker run --rm --entrypoint python \
--v /home/shulab/bty/brain-age/atlas/:/atlas/qsirecon_atlases \
--v /home/shulab/bty/brain-age/{site}/code:/code \
--v /home/shulab/bty/brain-age/{site}/{group}/:/data_1mm \
+-v {path to atlas}/:/atlas/qsirecon_atlases \
+-v {path to site}/{group}/code:/code \
+-v {path to site}/{group}/:/data_1mm \
 pennbbl/qsiprep:0.19.1 \
 /code/3_resample_yeo7.py /code/{site}_{group}_subjects.txt   
 
