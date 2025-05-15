@@ -5,6 +5,10 @@ docker run --rm --entrypoint python \
 pennbbl/qsiprep:0.19.1 \
 /code/3_resample_yeo7.py /code/{site}_{group}_subjects.txt   
 
+- Added atlas_config.json and Yeo7 atlas file for automated loading
+- Applied RobustMNINormalizationRPT for template-to-T1 registration
+- Used AFNI Resample to downsample registered template to 2mm resolution
+
 {path to atlas}
 atlas/
 ├── atlas_config.json
@@ -24,5 +28,3 @@ code
 ├── 2_resample_brain.py
 ├── 3_resample_yeo7.py
 └── {site}_{group}_subjects.txt
-
-
