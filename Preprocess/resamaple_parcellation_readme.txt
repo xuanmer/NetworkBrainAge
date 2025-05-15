@@ -1,9 +1,9 @@
 docker run --rm --entrypoint python \
 -v /home/shulab/bty/brain-age/atlas/:/atlas/qsirecon_atlases \
--v /home/shulab/bty/brain-age/zhongri/code:/code \
--v /home/shulab/bty/brain-age/zhongri/NC/:/data_1mm \
+-v /home/shulab/bty/brain-age/{site}/code:/code \
+-v /home/shulab/bty/brain-age/{site}/{group}/:/data_1mm \
 pennbbl/qsiprep:0.19.1 \
-/code/3_resample_yeo7.py /code/zhongri_NC_subjects.txt   
+/code/3_resample_yeo7.py /code/{site}_{group}_subjects.txt   
 
 {path to atlas}
 atlas/
@@ -23,6 +23,6 @@ code
 ├── 1_mgz2nii.py
 ├── 2_resample_brain.py
 ├── 3_resample_yeo7.py
-└── zhongri_NC_subjects.txt
+└── {site}_{group}_subjects.txt
 
 
