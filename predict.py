@@ -17,10 +17,10 @@ for NETWORK_NO in range(1, 8):
     print(f"\n===== Processing Subnetwork {NETWORK_NO} =====")
     
     # Load dataset
-    data = pd.read_csv("zhe2/brain_2mm/zhe2_data_nerve_health.csv")
+    data = pd.read_csv("{DARASET}_data_nerve_health.csv")
     
     # Load model for current subnetwork
-    model = load_model(f'bty/brain-age/structural_brain-age/Models/Net{NETWORK_NO}')
+    model = load_model(f'./Models/Net{NETWORK_NO}')
     
     # Update file paths to point to subnetwork-specific inputs
     data['path'] = data['path'].str.replace('brain_resample.nii.gz', 
@@ -45,7 +45,7 @@ for NETWORK_NO in range(1, 8):
     data['PAD'] = data['BA'] - data['Age']  # Prediction Age Difference
     
     # Save results for current subnetwork
-    output_file = f"zhe2/brain_2mm/results/zhe2_brainage_net{NETWORK_NO}.csv"
+    output_file = f"{Results}/{DATASETS}_brainage_net{NETWORK_NO}.csv"
     data.to_csv(output_file)
     print(f"Results for subnetwork {NETWORK_NO} saved to: {output_file}")
 
