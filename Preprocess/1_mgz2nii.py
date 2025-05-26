@@ -26,7 +26,7 @@ def convert_mgz_to_nii(input_dir, verbose=False):
     └── ...
 
     Usage Example:
-       python 1_mgz2nii.py /path/to/subjects_root -v
+       python 1_mgz2nii.py /path/to/subjects -v
     """
     # Validate input directory existence
     if not os.path.exists(input_dir):
