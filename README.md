@@ -36,13 +36,14 @@ python Preprocess/preprocess_data.py \
 ## Training
 ```bash
 python training_SFCN.py \
-
+```
 Training logs (loss, MAE, R²) will be written to logs/SFCN/ for visualization in TensorBoard.
 
 ## Inference
-
+```bash
+python Network-wiseBrainAgePrediction.py
+```
 ---
-
 ## License
 
 This project is licensed under the MIT License. See LICENSE for details.
