@@ -7,7 +7,7 @@ import sys
 import os.path
 
 # 声明所有路径变量
-BASE_DIR = '/home/shulab/bty/brain-age/zhe2'
+BASE_DIR = 'path to brain data'
 SUBJECT_GROUP = 'AD'  # 可修改的受试者组名称
 TMP_DIR_TEMPLATE = os.path.join(BASE_DIR, 'tmp%s')
 
