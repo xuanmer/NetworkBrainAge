@@ -27,4 +27,5 @@ code
 ├── 1_mgz2nii.py
 ├── 2_resample_brain.py
 ├── 3_resample_yeo7.py
+├── 4_mask.py
 └── {site}_{group}_subjects.txt
