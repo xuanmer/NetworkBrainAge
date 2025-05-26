@@ -6,42 +6,74 @@ import random
 import sys
 import os.path
 
-# 声明所有路径变量
-BASE_DIR = 'path to brain data'
-SUBJECT_GROUP = 'AD'  # 可修改的受试者组名称
-TMP_DIR_TEMPLATE = os.path.join(BASE_DIR, 'tmp%s')
+BASE_DIR = '/path/to/subjects'
+SUBJECT_GROUP = 'AD' 
+TMP_DIR_TEMPLATE = os.path.join(BASE_DIR, 'tmp%s') 
 
-# 动态构建的路径
-SUBJECTS_DIR = os.path.join(BASE_DIR, SUBJECT_GROUP)
-OUTPUT_DIR = os.path.join(SUBJECTS_DIR, 'brain_2mm')  # 改为基于 SUBJECTS_DIR
+# Dynamically constructed paths
+SUBJECTS_DIR = os.path.join(BASE_DIR, SUBJECT_GROUP) # /path/to/subjects/AD
+OUTPUT_DIR = os.path.join(SUBJECTS_DIR, 'brain_2mm')  
 
 def registration(sub):
-    work_dir = TMP_DIR_TEMPLATE % ''.join(random.sample('abcdefghijklmnopqrestuvwxyz0123456789', 8))  # tmp directory
-    # 构建输入路径
-    inputs = os.path.join(SUBJECTS_DIR, sub, 'fs/mri/brain.nii.gz')
-
-    workflow = Workflow(name='resample_brain', base_dir=work_dir)
-    resample = pe.Node(afni.Resample(outputtype='NIFTI_GZ', voxel_size=(2, 2, 2)), name='resample')
-    resample.inputs.in_file = inputs
+    """
+    Register and resample the brain image to 2mm isotropic resolution
+    
+    Parameters:
+    sub (str): Subject ID
+    """
+    # Create a temporary working directory with random name
+    work_dir = TMP_DIR_TEMPLATE.format(''.join(random.sample('abcdefghijklmnopqrstuvwxyz0123456789', 8)))
+    
+    # Input file path
+    input_file = SUBJECTS_DIR / sub / "fs/mri/brain.nii.gz"
+    
+    # Create workflow
+    workflow = Workflow(name='resample_brain', base_dir=str(work_dir))
+    
+    # Resample node
+    resample = pe.Node(
+        afni.Resample(outputtype='NIFTI_GZ', voxel_size=(2, 2, 2)),
+        name='resample'
+    )
+    resample.inputs.in_file = str(input_file)
+    
+    # Datasink node
     datasink = pe.Node(interface=nio.DataSink(), name="datasink")
-    datasink.inputs.base_directory = OUTPUT_DIR
-    # 设置 container 属性，确保每个受试者的结果保存到独立的子目录
-    datasink.inputs.container = sub
+    datasink.inputs.base_directory = str(OUTPUT_DIR)
+    datasink.inputs.container = sub  # Store results in subject-specific subdirectory
+    
+    # Connect nodes
     workflow.connect(resample, 'out_file', datasink, 'brain_2mm')
+    
+    # Execute workflow
     workflow.run()
-    os.system(f"rm -rf {work_dir}")
+    
+    # Cleanup temporary directory
+    import shutil
+    if work_dir.exists():
+        shutil.rmtree(work_dir)
 
-def startBatchJob(batchfile):
-    with open(batchfile, "r") as f:
-        sublist = list(map(lambda x: x.strip("\n"), f.readlines()))
-        for sub in sublist:
-            # 构建输出路径
-            output_path = os.path.join(OUTPUT_DIR, sub, f'{sub}_brain_resample.nii.gz')
-            if os.path.exists(output_path):
-                print("exist...")
+def start_batch_job(batch_file):
+    """
+    Start batch processing for subjects listed in a file
+    
+    Parameters:
+    batch_file (str): Path to file containing subject IDs
+    """
+    with open(batch_file, "r") as f:
+        subject_list = [line.strip() for line in f.readlines()]
+        
+        for subject in subject_list:
+            # Check if output already exists
+            output_path = OUTPUT_DIR / subject / f"{subject}_brain_resample.nii.gz"
+            if output_path.exists():
+                print(f"Skipping {subject}: Output already exists")
                 continue
-            registration(sub)
+                
+            # Process subject
+            registration(subject)
 
 if __name__ == '__main__':
-    batchfile = sys.argv[1]
-    startBatchJob(batchfile)
+    # Get batch file from command line argument
+    batch_file = sys.argv[1]
+    start_batch_job(batch_file)
