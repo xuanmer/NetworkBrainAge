@@ -15,6 +15,18 @@ def convert_mgz_to_nii(input_dir, verbose=False):
     Parameters:
     input_dir (str): Path to the input directory containing subject folders
     verbose (bool): Whether to display detailed output
+    
+    Expected File Structure:
+    input_dir/
+    ├── subject1/
+    │   └── fs/
+    │       └── mri/
+    │           ├── brain.mgz
+    │           └── brainmask.mgz
+    └── ...
+
+    Usage Example:
+       python 1_mgz2nii.py /path/to/subjects_root -v
     """
     # Validate input directory existence
     if not os.path.exists(input_dir):
