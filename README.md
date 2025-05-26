@@ -26,16 +26,14 @@ raw_data/
 ```
 2. Run the preprocessing pipeline:
 ```bash
-python Preprocess/preprocess_data.py \
-  --input_dir raw_data/ \
-  --output_dir processed_data/ \
-  --normalize --skull_strip
+python Preprocess/2_resample_brain.py
+python Preprocess/Parcellation _yeo7.py
 ```
 3. Prepare a CSV file (labels.csv) with columns: subject_id, age, gender (and any covariates).
 
 ## Training
 ```bash
-python training_SFCN.py \
+python training_SFCN.py
 ```
 Training logs (loss, MAE, R²) will be written to logs/SFCN/ for visualization in TensorBoard.
 
